@@ -29,7 +29,8 @@
         return;
     }
 
-    var BEACON_URL = "https://mybeaconurl.com/";
+    //var BEACON_URL = "https://mybeaconurl.com/";
+    var BEACON_URL = "https://www.tiaa.org/public/text/pmt.gif";
 
     //
     // Private implementation
@@ -70,7 +71,7 @@
         onBeacon: function(data) {
             // send the beacon elsewhere after a short delay
             setTimeout(function() {
-                var name, paramsJoined, url = [], useImg = false, w = BOOMR.window || window;
+                var name, paramsJoined, url = [], useImg = true, w = BOOMR.window || window;
 
                 for (name in data) {
                     // if this var is set, add it to our URL array
@@ -80,6 +81,8 @@
                 }
 
                 paramsJoined = url.join("&");
+
+                /*
 
                 //
                 // Try the sendBeacon API first.
@@ -107,6 +110,7 @@
                 if (!BOOMR.orig_XMLHttpRequest && (!w || !w.XMLHttpRequest)) {
                     useImg = true;
                 }
+                */
 
                 if (useImg) {
                     //
@@ -128,6 +132,7 @@
                     //img.src = url;
                     img.src = fullUrl;
                 }
+                /*
                 else {
                     //
                     // XHR beacon
@@ -144,6 +149,7 @@
                         impl.sendXhrPostBeacon(xhr, paramsJoined);
                     }
                 }
+                */
             }, 0);
         },
 
