@@ -31,6 +31,7 @@
 
     //var BEACON_URL = "https://mybeaconurl.com/";
     var BEACON_URL = "https://www.tiaa.org/public/text/pmt.gif";
+    var beaconParamToCopy = new Set(["rt.start","rt.tstart","rt.bstart","rt.end","t_resp","t_page","t_done","r","nt_red_cnt","nt_nav_type","nt_nav_st","nt_red_st","nt_red_end","nt_fet_st","nt_dns_st","nt_dns_end","nt_con_st","nt_con_end","nt_req_st","nt_res_st","nt_res_end","nt_domloading","nt_domint","nt_domcontloaded_st","nt_domcontloaded_end","nt_domcomp","nt_load_st","nt_load_end","nt_unload_st","nt_unload_end","nt_spdy","nt_cinf","nt_first_paint","u","v","vis.st","ua.plt","ua.vnd"]);
 
     //
     // Private implementation
@@ -75,81 +76,31 @@
 
                 for (name in data) {
                     // if this var is set, add it to our URL array
-                    if (data.hasOwnProperty(name)) {
+                    if (data.hasOwnProperty(name) && beaconParamToCopy.has(name)) {
                         url.push(impl.getUriEncodedVar(name, typeof data[name] === "undefined" ? "" : data[name]));
                     }
                 }
 
                 paramsJoined = url.join("&");
 
-                /*
-
                 //
-                // Try the sendBeacon API first.
-                // But if beacon_type is set to "GET", dont attempt
-                // sendBeacon API call
+                // Image beacon
                 //
-                if (w && w.navigator &&
-                    typeof w.navigator.sendBeacon === "function" &&
-                    BOOMR.utils.isNative(w.navigator.sendBeacon) &&
-                    typeof w.Blob === "function") {
-                    // note we're using sendBeacon with &sb=1
-                    var blobData = new w.Blob([paramsJoined + "&sb=1"], {
-                        type: "application/x-www-form-urlencoded"
-                    });
+                var img;
 
-                    if (w.navigator.sendBeacon(BEACON_URL, blobData)) {
-                        return true;
-                    }
-
-                    // sendBeacon was not successful, try Image or XHR beacons
+                // just in case Image isn't a valid constructor
+                try {
+                    img = new Image();
+                }
+                catch (e) {
+                    BOOMR.debug("Image is not a constructor, not sending a beacon");
+                    return false;
                 }
 
-                // If we don't have XHR available, force an image beacon and hope
-                // for the best
-                if (!BOOMR.orig_XMLHttpRequest && (!w || !w.XMLHttpRequest)) {
-                    useImg = true;
-                }
-                */
+                var fullUrl = BEACON_URL + "?" + paramsJoined;
 
-                if (useImg) {
-                    //
-                    // Image beacon
-                    //
-                    var img;
-
-                    // just in case Image isn't a valid constructor
-                    try {
-                        img = new Image();
-                    }
-                    catch (e) {
-                        BOOMR.debug("Image is not a constructor, not sending a beacon");
-                        return false;
-                    }
-
-                    var fullUrl = BEACON_URL + "?" + paramsJoined;
-
-                    //img.src = url;
-                    img.src = fullUrl;
-                }
-                /*
-                else {
-                    //
-                    // XHR beacon
-                    //
-
-                    // Send a form-encoded XHR POST beacon
-                    var xhr = new (w.orig_XMLHttpRequest || BOOMR.orig_XMLHttpRequest || w.XMLHttpRequest)();
-                    try {
-                        impl.sendXhrPostBeacon(xhr, paramsJoined);
-                    }
-                    catch (e) {
-                        // if we had an exception with the window XHR object, try our IFRAME XHR
-                        xhr = new BOOMR.boomerang_frame.XMLHttpRequest();
-                        impl.sendXhrPostBeacon(xhr, paramsJoined);
-                    }
-                }
-                */
+                //img.src = url;
+                img.src = fullUrl;
             }, 0);
         },
 
