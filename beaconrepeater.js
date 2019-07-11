@@ -1,16 +1,3 @@
-// ==UserScript==
-// @name         Beacon Repeater
-// @namespace    http://avishenoy.com
-// @version      1.0
-// @description  Repeat beacon data to another endpoint
-// @author       Avinash Shenoy, Nic Jansma
-// @match        *://*/*
-// @run-at       document-start
-// @grant        none
-// ==/UserScript==
-
-/* eslint-disable camelcase */
-
 /**
  * Repeats all beacons to a second URL.
  *
@@ -35,8 +22,8 @@
         return;
     }
 
-    var BEACON_URL = "https://mybeaconurl.com/";
-    var beaconParamToCopy = new Set(["rt.start","rt.tstart","rt.bstart","rt.end","t_resp","t_page","t_done","r","nt_red_cnt","nt_nav_type","nt_nav_st","nt_red_st","nt_red_end","nt_fet_st","nt_dns_st","nt_dns_end","nt_con_st","nt_con_end","nt_req_st","nt_res_st","nt_res_end","nt_domloading","nt_domint","nt_domcontloaded_st","nt_domcontloaded_end","nt_domcomp","nt_load_st","nt_load_end","nt_unload_st","nt_unload_end","nt_spdy","nt_cinf","nt_first_paint","u","v","vis.st","ua.plt","ua.vnd"]);
+    var BEACON_URL = "https://www.tiaa.org/public/text/pmt.gif";
+    var beaconParamToCopy = ["rt.start","rt.tstart","rt.bstart","rt.end","t_resp","t_page","t_done","r","nt_red_cnt","nt_nav_type","nt_nav_st","nt_red_st","nt_red_end","nt_fet_st","nt_dns_st","nt_dns_end","nt_con_st","nt_con_end","nt_req_st","nt_res_st","nt_res_end","nt_domloading","nt_domint","nt_domcontloaded_st","nt_domcontloaded_end","nt_domcomp","nt_load_st","nt_load_end","nt_unload_st","nt_unload_end","nt_spdy","nt_cinf","nt_first_paint","u","v","vis.st","ua.plt","ua.vnd"];
 
     //
     // Private implementation
@@ -81,7 +68,7 @@
 
                 for (name in data) {
                     // if this var is set, add it to our URL array
-                    if (data.hasOwnProperty(name) && beaconParamToCopy.has(name)) {
+                    if (data.hasOwnProperty(name) && beaconParamToCopy.indexOf(name) !== -1) {
                         url.push(impl.getUriEncodedVar(name, typeof data[name] === "undefined" ? "" : data[name]));
                     }
                 }
