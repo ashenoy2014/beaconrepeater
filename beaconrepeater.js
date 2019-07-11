@@ -3,7 +3,7 @@
 // @namespace    http://avishenoy.com
 // @version      1.0
 // @description  Repeat beacon data to another endpoint
-// @author       Avinash Shenoy
+// @author       Avinash Shenoy, Nic Jansma
 // @match        *://*/*
 // @run-at       document-start
 // @grant        none
@@ -16,8 +16,14 @@
  *
  * To configure, update BEACON_URL.
  *
- * This code repeats some code from Boomerang.  If you only need to send
- * XHR beacons, or only image beacons, or not sendBeacon(), it could be trimmed down.
+ * This code repeats some code from Boomerang. Its been modified to only send
+ * image beacons. Code related to using sendBeacon() API or XHR beacons have
+ * been removed and cant be brought back in if that needed.
+ *
+ * Currently, beaconParamToCopy has a list of timing variables that this plugin pulls
+ * from Boomerang regular beacons and includes in the repeated beacon that is then sent to
+ * the destination specified by BEACON_URL. This set can be expanded, if desired, to include
+ * other variables that are present on the boomerang beacon.
  *
  * @class BOOMR.plugins.BeaconRepeater
  */
@@ -29,8 +35,7 @@
         return;
     }
 
-    //var BEACON_URL = "https://mybeaconurl.com/";
-    var BEACON_URL = "https://www.tiaa.org/public/text/pmt.gif";
+    var BEACON_URL = "https://mybeaconurl.com/";
     var beaconParamToCopy = new Set(["rt.start","rt.tstart","rt.bstart","rt.end","t_resp","t_page","t_done","r","nt_red_cnt","nt_nav_type","nt_nav_st","nt_red_st","nt_red_end","nt_fet_st","nt_dns_st","nt_dns_end","nt_con_st","nt_con_end","nt_req_st","nt_res_st","nt_res_end","nt_domloading","nt_domint","nt_domcontloaded_st","nt_domcontloaded_end","nt_domcomp","nt_load_st","nt_load_end","nt_unload_st","nt_unload_end","nt_spdy","nt_cinf","nt_first_paint","u","v","vis.st","ua.plt","ua.vnd"]);
 
     //
